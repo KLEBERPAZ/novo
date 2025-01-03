@@ -12,27 +12,51 @@
         <form action="{{ url_for('place_bet') }}" method="post">
             <div>
                 <label for="numero1">Número 1:</label>
-                <input type="number" id="numero1" name="numero1" min="1" max="60" required>
+                <select id="numero1" name="numero1" required>
+                    {% for i in range(1, 61) %}
+                        <option value="{{ '{:02d}'.format(i) }}">{{ '{:02d}'.format(i) }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div>
                 <label for="numero2">Número 2:</label>
-                <input type="number" id="numero2" name="numero2" min="1" max="60" required>
+                <select id="numero2" name="numero2" required>
+                    {% for i in range(1, 61) %}
+                        <option value="{{ '{:02d}'.format(i) }}">{{ '{:02d}'.format(i) }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div>
                 <label for="numero3">Número 3:</label>
-                <input type="number" id="numero3" name="numero3" min="1" max="60" required>
+                <select id="numero3" name="numero3" required>
+                    {% for i in range(1, 61) %}
+                        <option value="{{ '{:02d}'.format(i) }}">{{ '{:02d}'.format(i) }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div>
                 <label for="numero4">Número 4:</label>
-                <input type="number" id="numero4" name="numero4" min="1" max="60" required>
+                <select id="numero4" name="numero4" required>
+                    {% for i in range(1, 61) %}
+                        <option value="{{ '{:02d}'.format(i) }}">{{ '{:02d}'.format(i) }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div>
                 <label for="numero5">Número 5:</label>
-                <input type="number" id="numero5" name="numero5" min="1" max="60" required>
+                <select id="numero5" name="numero5" required>
+                    {% for i in range(1, 61) %}
+                        <option value="{{ '{:02d}'.format(i) }}">{{ '{:02d}'.format(i) }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div>
                 <label for="numero6">Número 6:</label>
-                <input type="number" id="numero6" name="numero6" min="1" max="60" required>
+                <select id="numero6" name="numero6" required>
+                    {% for i in range(1, 61) %}
+                        <option value="{{ '{:02d}'.format(i) }}">{{ '{:02d}'.format(i) }}</option>
+                    {% endfor %}
+                </select>
             </div>
             <div>
                 <label for="valor">Valor da Aposta:</label>
