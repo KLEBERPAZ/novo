@@ -117,8 +117,18 @@ def edit_participant(participant_id):
     participante = participantes[participant_id]
     return render_template('edit_participant.html', participante=participante, participant_id=participant_id)
 
+@app.route('/delete_bet/<int:bet_id>', methods=['POST'])
+def delete_bet(bet_id):
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    
+    if 0 <= bet_id < len(apostas):
+        del apostas[bet_id]
+    return redirect(url_for('view_bets'))
+
 if __name__ == '__main__':
     app.run(debug=True)
+
 
 
 

@@ -11,7 +11,12 @@
         <h1>Ver Apostas</h1>
         <ul>
             {% for aposta in apostas %}
-                <li>Participante: {{ aposta.participante }} - Números: {{ aposta.numeros|join(', ') }} - Valor: R$ {{ aposta.valor }}</li>
+                <li>
+                    Participante: {{ aposta.participante }} - Números: {{ aposta.numeros|join(', ') }} - Valor: R$ {{ aposta.valor }}
+                    <form action="{{ url_for('delete_bet', bet_id=loop.index0) }}" method="post" style="display:inline;">
+                        <button type="submit" style="margin-left: 10px; color: red;">Excluir</button>
+                    </form>
+                </li>
             {% endfor %}
         </ul>
         <a href="{{ url_for('home') }}">Voltar</a>
