@@ -12,7 +12,7 @@
         <ul>
             {% for aposta in apostas %}
                 <li>
-                    Participante: {{ aposta.participante }} - Números: {{ aposta.numeros|join(', ') }} - Valor: R$ {{ aposta.valor }}
+                    Participante: {{ aposta.participante }} - Números: {{ aposta.numeros|join(', ') }} - Valor: R$ {{ aposta.valor }} - Tipo: {{ 'Mega Sena' if aposta.tipo_aposta == 'mega_sena' else 'Loto Fácil' }}
                     <form action="{{ url_for('delete_bet', bet_id=loop.index0) }}" method="post" style="display:inline;">
                         <button type="submit" style="margin-left: 10px; color: red;">Excluir</button>
                     </form>

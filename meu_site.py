@@ -26,8 +26,10 @@ def login():
     if request.method == 'POST':
         username = request.form['username']
         password = request.form['password']
+        tipo_aposta = request.form['tipo_aposta']
         if username == USUARIO['username'] and password == USUARIO['password']:
             session['username'] = username
+            session['tipo_aposta'] = tipo_aposta
             return redirect(url_for('home'))
         else:
             return "Login inválido. Tente novamente."
@@ -36,6 +38,7 @@ def login():
 @app.route('/logout')
 def logout():
     session.pop('username', None)
+    session.pop('tipo_aposta', None)
     return redirect(url_for('login'))
 
 @app.route('/place_bet', methods=['GET', 'POST'])
@@ -43,22 +46,28 @@ def place_bet():
     if 'username' not in session:
         return redirect(url_for('login'))
     
+    tipo_aposta = session.get('tipo_aposta')
+    
     if request.method == 'POST':
-        numeros = [
-            request.form['numero1'],
-            request.form['numero2'],
-            request.form['numero3'],
-            request.form['numero4'],
-            request.form['numero5'],
-            request.form['numero6']
-        ]
+        if tipo_aposta == "mega_sena":
+            numeros = [
+                request.form['numero1'],
+                request.form['numero2'],
+                request.form['numero3'],
+                request.form['numero4'],
+                request.form['numero5'],
+                request.form['numero6']
+            ]
+        elif tipo_aposta == "loto_facil":
+            numeros = [request.form['numero{}'.format(i)] for i in range(1, 16)]
+        
         valor = request.form['valor']
         participante = request.form['participante']
-        aposta = {'numeros': numeros, 'valor': valor, 'participante': participante}
+        aposta = {'numeros': numeros, 'valor': valor, 'participante': participante, 'tipo_aposta': tipo_aposta}
         apostas.append(aposta)
         return redirect(url_for('view_bets'))
     
-    return render_template('place_bet.html', participantes=participantes)
+    return render_template('place_bet.html', participantes=participantes, tipo_aposta=tipo_aposta)
 
 @app.route('/view_bets')
 def view_bets():
@@ -87,17 +96,22 @@ def edit_bet(bet_id):
         return redirect(url_for('login'))
     
     if request.method == 'POST':
-        numeros = [
-            request.form['numero1'],
-            request.form['numero2'],
-            request.form['numero3'],
-            request.form['numero4'],
-            request.form['numero5'],
-            request.form['numero6']
-        ]
+        tipo_aposta = session.get('tipo_aposta')
+        if tipo_aposta == "mega_sena":
+            numeros = [
+                request.form['numero1'],
+                request.form['numero2'],
+                request.form['numero3'],
+                request.form['numero4'],
+                request.form['numero5'],
+                request.form['numero6']
+            ]
+        elif tipo_aposta == "loto_facil":
+            numeros = [request.form['numero{}'.format(i)] for i in range(1, 16)]
+        
         valor = request.form['valor']
         participante = request.form['participante']
-        apostas[bet_id] = {'numeros': numeros, 'valor': valor, 'participante': participante}
+        apostas[bet_id] = {'numeros': numeros, 'valor': valor, 'participante': participante, 'tipo_aposta': tipo_aposta}
         return redirect(url_for('view_bets'))
     
     aposta = apostas[bet_id]
