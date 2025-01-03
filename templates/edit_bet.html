@@ -3,52 +3,52 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fazer Aposta</title>
+    <title>Editar Aposta</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
     <div class="container">
-        <h1>Fazer Aposta</h1>
-        <form action="{{ url_for('place_bet') }}" method="post">
+        <h1>Editar Aposta</h1>
+        <form action="{{ url_for('edit_bet', bet_id=bet_id) }}" method="post">
             <div>
                 <label for="numero1">Número 1:</label>
-                <input type="number" id="numero1" name="numero1" min="1" max="60" required>
+                <input type="number" id="numero1" name="numero1" min="1" max="60" value="{{ aposta.numeros[0] }}" required>
             </div>
             <div>
                 <label for="numero2">Número 2:</label>
-                <input type="number" id="numero2" name="numero2" min="1" max="60" required>
+                <input type="number" id="numero2" name="numero2" min="1" max="60" value="{{ aposta.numeros[1] }}" required>
             </div>
             <div>
                 <label for="numero3">Número 3:</label>
-                <input type="number" id="numero3" name="numero3" min="1" max="60" required>
+                <input type="number" id="numero3" name="numero3" min="1" max="60" value="{{ aposta.numeros[2] }}" required>
             </div>
             <div>
                 <label for="numero4">Número 4:</label>
-                <input type="number" id="numero4" name="numero4" min="1" max="60" required>
+                <input type="number" id="numero4" name="numero4" min="1" max="60" value="{{ aposta.numeros[3] }}" required>
             </div>
             <div>
                 <label for="numero5">Número 5:</label>
-                <input type="number" id="numero5" name="numero5" min="1" max="60" required>
+                <input type="number" id="numero5" name="numero5" min="1" max="60" value="{{ aposta.numeros[4] }}" required>
             </div>
             <div>
                 <label for="numero6">Número 6:</label>
-                <input type="number" id="numero6" name="numero6" min="1" max="60" required>
+                <input type="number" id="numero6" name="numero6" min="1" max="60" value="{{ aposta.numeros[5] }}" required>
             </div>
             <div>
                 <label for="valor">Valor da Aposta:</label>
-                <input type="number" id="valor" name="valor" required>
+                <input type="number" id="valor" name="valor" value="{{ aposta.valor }}" required>
             </div>
             <div>
                 <label for="participante">Participante:</label>
                 <select id="participante" name="participante" required>
                     {% for participante in participantes %}
-                        <option value="{{ participante.nome }}">{{ participante.nome }}</option>
+                        <option value="{{ participante.nome }}" {% if participante.nome == aposta.participante %}selected{% endif %}>{{ participante.nome }}</option>
                     {% endfor %}
                 </select>
             </div>
-            <button type="submit">Apostar</button>
+            <button type="submit">Salvar</button>
         </form>
-        <a href="{{ url_for('home') }}">Voltar</a>
+        <a href="{{ url_for('view_bets') }}">Voltar</a>
     </div>
 </body>
 </html>

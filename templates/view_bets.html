@@ -11,7 +11,7 @@
         <h1>Ver Apostas</h1>
         <ul>
             {% for aposta in apostas %}
-                <li>Evento: {{ aposta.evento }} - Valor: {{ aposta.valor }}</li>
+                <li>Participante: {{ aposta.participante }} - Números: {{ aposta.numeros|join(', ') }} - Valor: R$ {{ aposta.valor }}</li>
             {% endfor %}
         </ul>
         <a href="{{ url_for('home') }}">Voltar</a>
