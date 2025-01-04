@@ -5,7 +5,7 @@ app.secret_key = 'sua_chave_secreta_aqui'  # Substitua por uma chave secreta seg
 
 # Usuário fictício para demonstração
 USUARIO = {
-    "username": "123",
+    "username": "user",
     "password": "123"
 }
 
