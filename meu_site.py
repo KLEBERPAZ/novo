@@ -139,6 +139,8 @@ def edit_bet(bet_id):
     aposta = apostas[bet_id]
     return render_template('edit_bet.html', aposta=aposta, participantes=participantes, bet_id=bet_id)
 
+
+
 @app.route('/edit_participant/<int:participant_id>', methods=['GET', 'POST'])
 def edit_participant(participant_id):
     if 'username' not in session:
@@ -152,6 +154,8 @@ def edit_participant(participant_id):
     
     participante = participantes[participant_id]
     return render_template('edit_participant.html', participante=participante, participant_id=participant_id)
+
+
 
 @app.route('/delete_bet/<int:bet_id>', methods=['POST'])
 def delete_bet(bet_id):
