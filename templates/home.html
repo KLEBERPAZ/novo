@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>Bem-vindo, {{ username }}!</h1>
+        <a href="{{ url_for('place_bet') }}">Fazer Aposta</a>
+        <br>
+        <a href="{{ url_for('view_bets') }}">Ver Apostas</a>
+        <br>
+        <a href="{{ url_for('manage_participants') }}">Gerenciar Participantes</a>
+        <br>
+        <a href="{{ url_for('sobre') }}">Sobre</a>
+        <br>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,35 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.container {
+    background: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+}
+
+h1, h2 {
+    color: #444;
+}
+
+form div {
+    margin: 10px 0;
+}
+
+input {
+    padding: 10px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+button {
+[_{{{CITATION{{{_1{](https://github.com/osinmv/A3B20/tree/9399fea31eb8f6b4d0d807ebe7bae9a8bb06a5b9/app.py)[_{{{CITATION{{{_2{](https://github.com/NullOne01/python-simple-notes/tree/24a50492ec84615aabfeb25468e0f14a08e50143/project%2Fviews.py)[_{{{CITATION{{{_3{](https://github.com/Mr-Gus/Service-Beacon/tree/a21e1dee5d3887364ccc1811b50b813c7f80943e/Service-Beacon%2Fmanagement-console%2Fapp.py)[_{{{CITATION{{{_4{](https://github.com/gaoliujiadi/watchlist/tree/f5c9ea554252fe003f3977c8b1f2146550ba0261/app.py)[_{{{CITATION{{{_5{](https://github.com/alialtaf9/SafetyPennWeb/tree/2f15239e9a11b59c999cfc33495249c72c1d3434/routes.py)[_{{{CITATION{{{_6{](https://github.com/lgfranco22/blog/tree/2ff765f5547038ea91aa40671858d9fd9d5ffb28/entrar.php)[_{{{CITATION{{{_7{](https://github.com/VivianeBottini/eventdash_front/tree/8404e84130cb9ba7da5bc2cee5fefe927c1b3968/index.php)[_{{{CITATION{{{_8{](https://github.com/fil1pi/final/tree/c24ebe6ac5edd8e74fd67c1f482f4bbdfa7e8c62/view%2Fgestao.php)[_{{{CITATION{{{_9{](https://github.com/cezar-pereira/syscobranca/tree/2707010cd26babca13b899bdb23381c54094d23e/resources%2Fviews%2Flogin%2Flogin.blade.php)

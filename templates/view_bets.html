@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver Apostas</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th { background-color: #f2f2f2; }
+        .actions button { margin-left: 10px; }
+        .numbers td { text-align: center; }
+        .highlight { color: red; }
+        .premiado { background-color: #dff0d8; }
+
+        @media (max-width: 600px) {
+            table, thead, tbody, th, td, tr { display: block; width: 100%; }
+            th, td { display: block; box-sizing: border-box; }
+            tr { margin-bottom: 10px; }
+            .bet-numbers span { display: inline-block; margin-right: 5px; }
+            .actions { display: flex; flex-direction: column; }
+            .actions button { margin-bottom: 5px; width: 100%; }
+        }
+    </style>
+    <script>
+        function verificarNumeros(tipo) {
+            const inputNumeros = new Set();
+            const totalNumeros = tipo === 'mega_sena' ? 6 : 15;
+            const minimoPremiado = tipo === 'mega_sena' ? 4 : 11;
+
+            for (let i = 1; i <= totalNumeros; i++) {
+                const numero = document.getElementById(`${tipo}_numero${i}`).value;
+                if (numero) {
+                    if (inputNumeros.has(numero)) {
+                        alert('Número já escolhido, por favor escolha um número diferente.');
+                        document.getElementById(`${tipo}_numero${i}`).value = '';
+                        return;
+                    }
+                    inputNumeros.add(numero);
+                }
+            }
+
+            document.querySelectorAll('.bet-numbers').forEach(aposta => {
+                const tipoAposta = aposta.getAttribute('data-tipo');
+                const numeros = aposta.querySelectorAll('.number');
+                let acertos = 0;
+
+                if (tipoAposta === tipo) {
+                    numeros.forEach(numero => {
+                        if (inputNumeros.has(numero.textContent)) {
+                            numero.classList.add('highlight');
+                            acertos++;
+                        } else {
+                            numero.classList.remove('highlight');
+                        }
+                    });
+                    aposta.closest('tr').classList.toggle('premiado', acertos >= minimoPremiado);
+                } else {
+                    numeros.forEach(numero => numero.classList.remove('highlight'));
+                }
+            });
+        }
+
+        function moveUp(row) {
+            const currentRow = row.closest('tr');
+            const previousRow = currentRow.previousElementSibling;
+            if (previousRow) currentRow.parentNode.insertBefore(currentRow, previousRow);
+        }
+
+        function moveDown(row) {
+            const currentRow = row.closest('tr');
+            const nextRow = currentRow.nextElementSibling;
+            if (nextRow) currentRow.parentNode.insertBefore(currentRow, currentRow);
+        }
+
+        function calcularTotal() {
+            let total = 0;
+            document.querySelectorAll('.bet-value').forEach(valor => {
+                total += parseFloat(valor.textContent.replace(',', '.'));
+            });
+            document.getElementById('totalValor').textContent = total.toFixed(2).replace('.', ',');
+        }
+
+        document.addEventListener('DOMContentLoaded', calcularTotal);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Ver Apostas</h1>
+        <h2>Escolha 6 números sorteados da Mega Sena</h2>
+        <table><tr>{% for i in range(1, 7) %}<td><select id="mega_sena_numero{{ i }}" onchange="verificarNumeros('mega_sena')">
+            <option value="">--</option>{% for j in range(1, 61) %}<option value="{{ '{:02d}'.format(j) }}">{{ '{:02d}'.format(j) }}</option>{% endfor %}</select></td>{% endfor %}</tr></table>
+
+        <h2>Escolha 15 números sorteados da Loto-Fácil</h2>
+        <table><tr>{% for i in range(1, 16) %}<td><select id="loto_facil_numero{{ i }}" onchange="verificarNumeros('loto_facil')">
+            <option value="">--</option>{% for j in range(1, 26) %}<option value="{{ '{:02d}'.format(j) }}">{{ '{:02d}'.format(j) }}</option>{% endfor %}</select></td>{% endfor %}</tr></table>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Nº</th>
+                    <th>Participante</th>
+                    <th>Números</th>
+                    <th>Valor (R$)</th>
+                    <th>Tipo</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for aposta in apostas %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ aposta.participante }}</td>
+                    <td class="bet-numbers" data-tipo="{{ aposta.tipo_aposta }}">
+                        {% for numero in aposta.numeros %}<span class="number">{{ numero }}</span>{% if not loop.last %}, {% endif %}{% endfor %}
+                    </td>
+                    <td class="bet-value">{{ aposta.valor }}</td>
+                    <td>{{ 'Mega Sena' if aposta.tipo_aposta == 'mega_sena' else 'Loto Fácil' }}</td>
+                    <td class="actions">
+                        <form action="{{ url_for('delete_bet', bet_id=loop.index0) }}" method="post" style="display:inline;"><button type="submit" style="color:red;">Excluir</button></form>
+                        <form action="{{ url_for('edit_bet', bet_id=loop.index0) }}" method="get" style="display:inline;"><button type="submit">Editar</button></form>
+                        <button onclick="moveUp(this)">↑</button>
+                        <button onclick="moveDown(this)">↓</button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        <h2>Total de Valor (R$): <span id="totalValor"></span></h2>
+        <a href="{{ url_for('home') }}">Voltar</a>
+    </div>
+</body>
+</html>
