@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session 
-from datetime import datetime
+from flask import Flask, render_template, request, redirect, url_for, session, send_file
 import os
 from fpdf import FPDF
 
@@ -223,6 +222,47 @@ def cadastro_alunos():
         return redirect(url_for('cadastro_alunos'))
     
     return render_template('cadastro_alunos.html', alunos=alunos, turmas=turmas)
+
+
+
+@app.route('/generate_pdf')
+def generate_pdf():
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    
+    class PDF(FPDF):
+        def header(self):
+            self.set_font('Arial', 'B', 16)
+            self.cell(0, 10, 'Relatório de Alunos Cadastrados', 0, 1, 'C')
+            self.ln(10)
+
+        def footer(self):
+            self.set_y(-15)
+            self.set_font('Arial', 'I', 8)
+            self.cell(0, 10, f'Página {self.page_no()}', 0, 0, 'C')
+
+    pdf = PDF()
+    pdf.add_page()
+    pdf.set_font('Arial', 'B', 12)
+    
+    # Cabeçalho das colunas
+    pdf.cell(60, 10, 'Nome', 1, 0, 'C')
+    pdf.cell(30, 10, 'Idade', 1, 0, 'C')
+    pdf.cell(40, 10, 'Turma', 1, 1, 'C')
+    
+    pdf.set_font('Arial', '', 12)
+    
+    # Linhas de dados
+    for aluno in alunos:
+        pdf.cell(60, 10, aluno['nome'], 1)
+        pdf.cell(30, 10, str(aluno['idade']), 1)
+        pdf.cell(40, 10, aluno['turma'], 1)
+        pdf.ln()
+    
+    pdf_output = 'static/alunos.pdf'
+    pdf.output(pdf_output)
+
+    return send_file(pdf_output, as_attachment=True)
 
 
 
