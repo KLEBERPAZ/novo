@@ -183,11 +183,9 @@ def sobre():
 def escola():
     return render_template('escola.html')
 
-
 @app.route('/cadastro_alunos')
 def cadastro_alunos():
     return render_template('cadastro_alunos.html')
-
 
 @app.route('/cadastro_turmas')
 def cadastro_turmas():
