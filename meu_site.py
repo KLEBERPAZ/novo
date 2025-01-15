@@ -1,5 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
-#from fpdf import fpdf
+from fpdf import FPDF
+from datetime import datetime
 import os
 
 app = Flask(__name__)
@@ -262,8 +263,6 @@ def generate_pdf():
     pdf.output(pdf_output)
 
     return send_file(pdf_output, as_attachment=True)
-
-
 
 
 
