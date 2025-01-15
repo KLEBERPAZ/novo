@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerenciar Participantes</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            const dataApostaInput = document.getElementById('data_aposta');
+            const today = new Date().toISOString().split('T')[0];
+            dataApostaInput.value = today;
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Gerenciar Participantes</h1>
+        <form action="{{ url_for('manage_participants') }}" method="post">
+            <div>
+                <label for="nome">Nome:</label>
+                <input type="text" id="nome" name="nome" required>
+            </div>
+            <div>
+                <label for="data_aposta">Data da Aposta:</label>
+                <input type="date" id="data_aposta" name="data_aposta" required>
+            </div>
+            <button type="submit">Adicionar Participante</button>
+        </form>
+        <h2>Lista de Participantes</h2>
+        <ul>
+            {% for participante in participantes %}
+                <li>
+                    Nome: {{ participante.nome }} - Data da Aposta: {{ participante.data_aposta }}
+                    <form action="{{ url_for('edit_participant', participant_id=loop.index0) }}" method="get" style="display:inline;">
+                        <button type="submit" style="color:blue;">Editar</button>
+                    </form>
+                    <form action="{{ url_for('delete_participant', participant_id=loop.index0) }}" method="post" style="display:inline;">
+                        <button type="submit" style="color:red;">Excluir</button>
+                    </form>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="{{ url_for('home') }}">Voltar</a>
+    </div>
+</body>
+</html>

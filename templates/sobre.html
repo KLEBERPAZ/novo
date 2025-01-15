@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redes Sociais</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        .social-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .social-links {
+            list-style: none;
+            padding: 0;
+        }
+        .social-links li {
+            margin: 10px 0;
+        }
+        .social-links a {
+            text-decoration: none;
+            color: #000;
+            font-weight: bold;
+        }
+        .social-links a:hover {
+            color: #007BFF;
+        }
+        .video-container {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Minhas Redes Sociais</h1>
+        <div class="social-container">
+            <ul class="social-links">
+                <li><a href="https://www.facebook.com/kleber.paz.5" target="_blank">Facebook</a></li>
+                <li><a href="https://www.instagram.com/kleberandre21" target="_blank">Instagram</a></li>
+                <li><a href="https://x.com/paz_kleber" target="_blank">Twitter</a></li>
+                <li><a href="https://www.linkedin.com/in/kleber-paz-84b0b490/" target="_blank">LinkedIn</a></li>
+                <!-- Adicione mais links de redes sociais conforme necessário -->
+            </ul>
+            <div class="video-container">
+                <video width="500" height="280" controls>
+                    <source src="static/videos/video.mp4" type="video/mp4">
+                    Seu navegador não suporta a tag de vídeo.
+                </video>
+            </div>
+        </div>
+        <a href="{{ url_for('home') }}">Voltar</a>
+   
+    </div>
+</body>
+</html>

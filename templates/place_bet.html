@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fazer Aposta</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script>
+        function verificarRepetidos() {
+            const numeros = new Set();
+            let repetido = false;
+            const selects = document.querySelectorAll('select[id^="numero"]');
+
+            selects.forEach(select => {
+                if (select.value) {
+                    if (numeros.has(select.value)) {
+                        repetido = true;
+                    } else {
+                        numeros.add(select.value);
+                    }
+                }
+            });
+
+            if (repetido) {
+                alert("Número repetido não permitido. Por favor, escolha um número diferente.");
+                return false;
+            }
+            return true;
+        }
+
+        function adicionarEventos() {
+            const selects = document.querySelectorAll('select[id^="numero"]');
+            selects.forEach(select => {
+                select.addEventListener('change', () => {
+                    const numeros = new Set();
+                    let repetido = false;
+                    selects.forEach(s => {
+                        if (s.value) {
+                            if (numeros.has(s.value) && s !== select) {
+                                repetido = true;
+                            } else {
+                                numeros.add(s.value);
+                            }
+                        }
+                    });
+
+                    if (repetido) {
+                        alert("Número repetido não permitido. Por favor, escolha um número diferente.");
+                        select.value = '';
+                    }
+                });
+            });
+        }
+
+        function gerarNumerosAleatorios(tipoAposta) {
+            const totalNumeros = tipoAposta === 'mega_sena' ? 6 : 15;
+            const limite = tipoAposta === 'mega_sena' ? 60 : 25;
+            const numerosAleatorios = new Set();
+
+            while (numerosAleatorios.size < totalNumeros) {
+                const numero = Math.floor(Math.random() * limite) + 1;
+                numerosAleatorios.add(('0' + numero).slice(-2));  // Para garantir dois dígitos
+            }
+
+            Array.from(numerosAleatorios).forEach((numero, index) => {
+                document.getElementById(`numero${index + 1}`).value = numero;
+            });
+        }
+
+        function ajustarValorAposta() {
+            const tipoAposta = document.getElementById('tipo_aposta').value;
+            const valorInput = document.getElementById('valor');
+            if (tipoAposta === 'mega_sena') {
+                valorInput.value = 5.00;
+            } else if (tipoAposta === 'loto_facil') {
+                valorInput.value = 3.00;
+            }
+        }
+
+        window.onload = () => {
+            adicionarEventos();
+            document.getElementById('tipo_aposta').addEventListener('change', ajustarValorAposta);
+            ajustarValorAposta();  // Para ajustar o valor inicial ao carregar a página
+        };
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Fazer Aposta</h1>
+        <form action="{{ url_for('place_bet') }}" method="post" onsubmit="return verificarRepetidos()">
+            <div>
+                <label for="tipo_aposta">Tipo de Aposta:</label>
+                <select id="tipo_aposta" name="tipo_aposta" required>
+                    <option value="mega_sena">Mega Sena</option>
+                    <option value="loto_facil">Loto Fácil</option>
+                </select>
+            </div>
+            {% if tipo_aposta == "mega_sena" %}
+                {% for i in range(1, 7) %}
+                <div>
+                    <label for="numero{{ i }}">Número {{ i }}:</label>
+                    <select id="numero{{ i }}" name="numero{{ i }}" required>
+                        <option value="">--</option>
+                        {% for j in range(1, 61) %}
+                            <option value="{{ '{:02d}'.format(j) }}">{{ '{:02d}'.format(j) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endfor %}
+                <button type="button" onclick="gerarNumerosAleatorios('mega_sena')">Gerar Números Aleatórios</button>
+            {% elif tipo_aposta == "loto_facil" %}
+                {% for i in range(1, 16) %}
+                <div>
+                    <label for="numero{{ i }}">Número {{ i }}:</label>
+                    <select id="numero{{ i }}" name="numero{{ i }}" required>
+                        <option value="">--</option>
+                        {% for j in range(1, 26) %}
+                            <option value="{{ '{:02d}'.format(j) }}">{{ '{:02d}'.format(j) }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                {% endfor %}
+                <button type="button" onclick="gerarNumerosAleatorios('loto_facil')">Gerar Números Aleatórios</button>
+            {% endif %}
+            <div>
+                <label for="valor">Valor da Aposta:</label>
+                <input type="number" id="valor" name="valor" required>
+            </div>
+            <div>
+                <label for="participante">Participante:</label>
+                <select id="participante" name="participante" required>
+                    {% for participante in participantes %}
+                        <option value="{{ participante.nome }}">{{ participante.nome }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <button type="submit">Apostar</button>
+        </form>
+        <a href="{{ url_for('home') }}">Voltar</a>
+    </div>
+</body>
+</html>
