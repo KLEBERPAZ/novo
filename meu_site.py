@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, session 
 from datetime import datetime
 import os
+from fpdf import FPDF
 
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta_aqui'  # Substitua por uma chave secreta segura
