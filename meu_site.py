@@ -109,7 +109,7 @@ def manage_participants():
         participante = {'nome': nome, 'data_aposta': data_aposta}
         participantes.append(participante)
         return redirect(url_for('manage_participants'))
-    
+
     return render_template('manage_participants.html', participantes=sorted(participantes, key=lambda p: p['nome'].lower()))
 
 @app.route('/edit_bet/<int:bet_id>', methods=['GET', 'POST'])
