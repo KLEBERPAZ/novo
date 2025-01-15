@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, session, send_file
-from reportlab.lib.pagesizes import letter
-from reportlab.pdfgen import canvas
+#from fpdf import fpdf
 import os
 
 app = Flask(__name__)
@@ -40,6 +39,8 @@ turmas = []
 
 # Lista para armazenar alunos
 alunos = []
+
+
 
 @app.route('/')
 def home():
@@ -146,6 +147,8 @@ def edit_bet(bet_id):
     aposta = apostas[bet_id]
     return render_template('edit_bet.html', aposta=aposta, participantes=participantes, bet_id=bet_id)
 
+
+
 @app.route('/edit_participant/<int:participant_id>', methods=['GET', 'POST'])
 def edit_participant(participant_id):
     if 'username' not in session:
@@ -159,6 +162,8 @@ def edit_participant(participant_id):
     
     participante = participantes[participant_id]
     return render_template('edit_participant.html', participante=participante, participant_id=participant_id)
+
+
 
 @app.route('/delete_bet/<int:bet_id>', methods=['POST'])
 def delete_bet(bet_id):
@@ -186,6 +191,7 @@ def sobre():
 def escola():
     return render_template('escola.html')
 
+
 @app.route('/cadastro_turmas', methods=['GET', 'POST'])
 def cadastro_turmas():
     if 'username' not in session:
@@ -200,6 +206,7 @@ def cadastro_turmas():
         return redirect(url_for('cadastro_turmas'))
 
     return render_template('cadastro_turmas.html', turmas=turmas)
+
 
 @app.route('/cadastro_alunos', methods=['GET', 'POST'])
 def cadastro_alunos():
@@ -216,39 +223,50 @@ def cadastro_alunos():
     
     return render_template('cadastro_alunos.html', alunos=alunos, turmas=turmas)
 
+
 @app.route('/generate_pdf')
 def generate_pdf():
     if 'username' not in session:
         return redirect(url_for('login'))
     
-    pdf_output = 'static/alunos.pdf'
-    c = canvas.Canvas(pdf_output, pagesize=letter)
-    width, height = letter
+    class PDF(FPDF):
+        def header(self):
+            self.set_font('Arial', 'B', 16)
+            self.cell(0, 10, 'Relatório de Alunos Cadastrados', 0, 1, 'C')
+            self.ln(10)
 
-    # Cabeçalho do PDF
-    c.setFont('Helvetica-Bold', 16)
-    c.drawString(200, height - 40, 'Relatório de Alunos Cadastrados')
-    c.setFont('Helvetica', 12)
-    c.drawString(30, height - 80, 'Nome')
-    c.drawString(160, height - 80, 'Idade')
-    c.drawString(250, height - 80, 'Turma')
+        def footer(self):
+            self.set_y(-15)
+            self.set_font('Arial', 'I', 8)
+            self.cell(0, 10, f'Página {self.page_no()}', 0, 0, 'C')
 
+    pdf = PDF()
+    pdf.add_page()
+    pdf.set_font('Arial', 'B', 12)
+    
+    # Cabeçalho das colunas
+    pdf.cell(60, 10, 'Nome', 1, 0, 'C')
+    pdf.cell(30, 10, 'Idade', 1, 0, 'C')
+    pdf.cell(40, 10, 'Turma', 1, 1, 'C')
+    
+    pdf.set_font('Arial', '', 12)
+    
     # Linhas de dados
-    y = height - 100
     for aluno in alunos:
-        c.drawString(30, y, aluno['nome'])
-        c.drawString(160, y, str(aluno['idade']))
-        c.drawString(250, y, aluno['turma'])
-        y -= 20
-
-        if y < 40:  # Se a linha estiver próxima ao fim da página, adicione uma nova página
-            c.showPage()
-            y = height - 40
-            c.setFont('Helvetica', 12)
-
-    c.save()
+        pdf.cell(60, 10, aluno['nome'], 1)
+        pdf.cell(30, 10, str(aluno['idade']), 1)
+        pdf.cell(40, 10, aluno['turma'], 1)
+        pdf.ln()
+    
+    pdf_output = 'static/alunos.pdf'
+    pdf.output(pdf_output)
 
     return send_file(pdf_output, as_attachment=True)
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
