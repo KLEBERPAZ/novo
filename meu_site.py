@@ -1,5 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session, send_file
-#from fpdf import FPDF
+from flask import Flask, render_template, request, redirect, url_for, session
 from datetime import datetime
 import os
 
