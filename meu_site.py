@@ -34,6 +34,11 @@ apostas = []
 # Lista para armazenar participantes
 participantes = []
 
+# Lista para armazenar turmas
+turmas = []
+
+
+
 @app.route('/')
 def home():
     if 'username' in session:
@@ -187,9 +192,22 @@ def escola():
 def cadastro_alunos():
     return render_template('cadastro_alunos.html')
 
-@app.route('/cadastro_turmas')
+@app.route('/cadastro_turmas', methods=['GET', 'POST'])
 def cadastro_turmas():
-    return render_template('cadastro_turmas.html')
+    if 'username' not in session:
+        return redirect(url_for('login'))
+    
+    if request.method == 'POST':
+        serie = request.form['serie']
+        turma = request.form['turma']
+        turno = request.form['turno']
+        nova_turma = {'serie': serie, 'turma': turma, 'turno': turno}
+        turmas.append(nova_turma)
+        return redirect(url_for('cadastro_turmas'))
+
+    return render_template('cadastro_turmas.html', turmas=turmas)
+
+
 
 
 

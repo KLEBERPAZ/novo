@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Turmas</title>
+</head>
+<body>
+    <h1>Cadastro de Turmas</h1>
+    <form action="{{ url_for('cadastro_turmas') }}" method="post">
+        <label for="serie">Série:</label>
+        <input type="text" id="serie" name="serie" required>
+        
+        <label for="turma">Turma:</label>
+        <input type="text" id="turma" name="turma" required>
+        
+        <label for="turno">Turno:</label>
+        <input type="text" id="turno" name="turno" required>
+        
+        <button type="submit">Cadastrar</button>
+    </form>
+
+    <h2>Turmas Cadastradas</h2>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Série</th>
+                <th>Turma</th>
+                <th>Turno</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for turma in turmas %}
+            <tr>
+                <td>{{ turma.serie }}</td>
+                <td>{{ turma.turma }}</td>
+                <td>{{ turma.turno }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+        
+    <a href="{{ url_for('escola') }}">Voltar</a>
+</body>
+</html>
