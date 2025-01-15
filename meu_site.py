@@ -179,6 +179,13 @@ def delete_participant(participant_id):
 def sobre():
     return render_template('sobre.html')
 
+@app.route('/escola')
+def escola():
+    return render_template('escola.html')
+
+
+
+
 if __name__ == '__main__':
     app.run(debug=True)
 
