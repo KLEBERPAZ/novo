@@ -265,14 +265,21 @@ def generate_pdf():
 
     return send_file(pdf_output, as_attachment=True)
 
-
-
 @app.route('/escola_1')
 def escola_1():
     return render_template('escola_1.html')
 
 
 
+@app.route('/administrativo')
+def administrativo():
+    return render_template('administrativo.html')
+
+
+
+
+#if __name__ == '__main__':
+ #   app.run(debug=True)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='192.168.1.21', port=5000, debug=True)

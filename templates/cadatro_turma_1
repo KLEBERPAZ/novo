@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro de Turmas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        h1 {
+            font-size: 24px;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+        input[type="text"],
+        select {
+            width: calc(100% - 20px);
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        .time-input {
+            width: 45px;
+            margin-right: 10px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #0056a3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #004080;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Cadastro de Turmas</h1>
+        <form>
+            <div class="form-group">
+                <label for="nome">Nome da turma:</label>
+                <input type="text" id="nome" name="nome" placeholder="Ex: 3ANOAM2025" required>
+            </div>
+            <div class="form-group">
+                <label for="tipo">Tipo de Atendimento:</label>
+                <select id="tipo" name="tipo" required>
+                    <option value="">Escolha...</option>
+                    <option value="nao-aplica">Não se aplica</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="nivel">Nível/Etapa:</label>
+                <select id="nivel" name="nivel" required>
+                    <option value="fundamental">Ensino Fundamental de 9 anos - 3º Ano</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="turno">Turno:</label>
+                <select id="turno" name="turno" required>
+                    <option value="manha">Manhã</option>
+                    <option value="tarde">Tarde</option>
+                    <option value="noite">Noite</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="dias">Dias da semana:</label>
+                <input type="text" id="dias" name="dias" placeholder="Ex: Segunda-feira, Terça-feira" required>
+            </div>
+            <div class="form-group">
+                <label>Horário:</label>
+                <input type="text" class="time-input" placeholder="07" maxlength="2" required> : 
+                <input type="text" class="time-input" placeholder="00" maxlength="2" required>
+                até
+                <input type="text" class="time-input" placeholder="11" maxlength="2" required> : 
+                <input type="text" class="time-input" placeholder="30" maxlength="2" required>
+            </div>
+            <div class="form-group">
+                <label for="letra">Letra da turma:</label>
+                <input type="text" id="letra" name="letra" maxlength="1" placeholder="Ex: A" required>
+            </div>
+            <div class="form-group">
+                <label for="vagas">Quantidade de vagas:</label>
+                <input type="text" id="vagas" name="vagas" placeholder="Ex: 30" required>
+            </div>
+            <div class="form-group">
+                <label for="disciplinas">Disciplinas:</label>
+                <input type="text" id="disciplinas" name="disciplinas" placeholder="Ex: Matemática, Ciências" required>
+            </div>
+            <div class="form-group">
+                <label for="anexo">Anexo:</label>
+                <select id="anexo" name="anexo">
+                    <option value="matriz">Matriz</option>
+                </select>
+            </div>
+            <button type="submit">Cadastrar</button>
+        </form>
+    </div>
+</body>
+</html>
