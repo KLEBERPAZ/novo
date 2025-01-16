@@ -191,6 +191,9 @@ def sobre():
 def escola():
     return render_template('escola.html')
 
+@app.route('/login_sge')
+def login_sge():
+    return render_template('login_sge.html')
 
 @app.route('/cadastro_turmas', methods=['GET', 'POST'])
 def cadastro_turmas():
@@ -262,6 +265,11 @@ def generate_pdf():
 
     return send_file(pdf_output, as_attachment=True)
 
+
+
+@app.route('/escola_1')
+def escola_1():
+    return render_template('escola_1.html')
 
 
 
