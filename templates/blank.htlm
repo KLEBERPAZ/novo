@@ -1,6 +1,12 @@
-@app.route('/escola_1')
-def escola_1():
-    if 'username' not in session:
-        return redirect(url_for('login'))
-    ano = session.get('ano', 'N/A')  # Obtém o ano da sessão ou usa 'N/A' como valor padrão
-    return render_template('escola_1.html', ano=ano)
+<tr>
+    {% for i in range(1, 6) %}
+    <td>
+        <select id="quina_numero{{ i }}" onchange="verificarNumeros('quina')">
+            <option value="">--</option>
+            {% for j in range(1, 81) %}
+            <option value="{{ '{:02d}'.format(j) }}">{{ '{:02d}'.format(j) }}</option>
+            {% endfor %}
+        </select>
+    </td>
+    {% endfor %}
+</tr>

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Fazer Aposta</title>
+    <title>Apostas</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <script>
         function verificarRepetidos() {
@@ -53,8 +53,17 @@
         }
 
         function gerarNumerosAleatorios(tipoAposta) {
-            const totalNumeros = tipoAposta === 'mega_sena' ? 6 : 15;
-            const limite = tipoAposta === 'mega_sena' ? 60 : 25;
+            let totalNumeros, limite;
+            if (tipoAposta === 'mega_sena') {
+                totalNumeros = 6;
+                limite = 60;
+            } else if (tipoAposta === 'loto_facil') {
+                totalNumeros = 15;
+                limite = 25;
+            } else if (tipoAposta === 'quina') {
+                totalNumeros = 5;
+                limite = 80;
+            }
             const numerosAleatorios = new Set();
 
             while (numerosAleatorios.size < totalNumeros) {
@@ -74,13 +83,15 @@
                 valorInput.value = 5.00;
             } else if (tipoAposta === 'loto_facil') {
                 valorInput.value = 3.00;
+            } else if (tipoAposta === 'quina') {
+                valorInput.value = 2.50;
             }
         }
 
         window.onload = () => {
             adicionarEventos();
             document.getElementById('tipo_aposta').addEventListener('change', ajustarValorAposta);
-            ajustarValorAposta();  // Para ajustar o valor inicial ao carregar a página
+            ajustarValorAposta();
         };
     </script>
 </head>
@@ -93,38 +104,16 @@
                 <select id="tipo_aposta" name="tipo_aposta" required>
                     <option value="mega_sena">Mega Sena</option>
                     <option value="loto_facil">Loto Fácil</option>
+                    <option value="quina">Quina</option>
                 </select>
             </div>
-            {% if tipo_aposta == "mega_sena" %}
-                {% for i in range(1, 7) %}
-                <div>
-                    <label for="numero{{ i }}">Número {{ i }}:</label>
-                    <select id="numero{{ i }}" name="numero{{ i }}" required>
-                        <option value="">--</option>
-                        {% for j in range(1, 61) %}
-                            <option value="{{ '{:02d}'.format(j) }}">{{ '{:02d}'.format(j) }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                {% endfor %}
-                <button type="button" onclick="gerarNumerosAleatorios('mega_sena')">Gerar Números Aleatórios</button>
-            {% elif tipo_aposta == "loto_facil" %}
-                {% for i in range(1, 16) %}
-                <div>
-                    <label for="numero{{ i }}">Número {{ i }}:</label>
-                    <select id="numero{{ i }}" name="numero{{ i }}" required>
-                        <option value="">--</option>
-                        {% for j in range(1, 26) %}
-                            <option value="{{ '{:02d}'.format(j) }}">{{ '{:02d}'.format(j) }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                {% endfor %}
-                <button type="button" onclick="gerarNumerosAleatorios('loto_facil')">Gerar Números Aleatórios</button>
-            {% endif %}
+            <div id="numeros_aposta">
+                <!-- Os selects de números serão adicionados dinamicamente aqui -->
+            </div>
+            <button type="button" onclick="gerarNumerosAleatorios(document.getElementById('tipo_aposta').value)">Gerar Números Aleatórios</button>
             <div>
                 <label for="valor">Valor da Aposta:</label>
-                <input type="number" id="valor" name="valor" required>
+                <input type="number" id="valor" name="valor" step="0.01" required>
             </div>
             <div>
                 <label for="participante">Participante:</label>
@@ -138,5 +127,51 @@
         </form>
         <a href="{{ url_for('home') }}">Voltar</a>
     </div>
+    <script>
+        const tipoApostaElement = document.getElementById('tipo_aposta');
+        const numerosApostaElement = document.getElementById('numeros_aposta');
+
+        function criarSelectNumeros(totalNumeros, limite) {
+            numerosApostaElement.innerHTML = '';
+            for (let i = 1; i <= totalNumeros; i++) {
+                const div = document.createElement('div');
+                const label = document.createElement('label');
+                label.htmlFor = `numero${i}`;
+                label.innerText = `Número ${i}:`;
+                const select = document.createElement('select');
+                select.id = `numero${i}`;
+                select.name = `numero${i}`;
+                select.required = true;
+                const defaultOption = document.createElement('option');
+                defaultOption.value = '';
+                defaultOption.innerText = '--';
+                select.appendChild(defaultOption);
+                for (let j = 1; j <= limite; j++) {
+                    const option = document.createElement('option');
+                    option.value = ('0' + j).slice(-2);
+                    option.innerText = ('0' + j).slice(-2);
+                    select.appendChild(option);
+                }
+                div.appendChild(label);
+                div.appendChild(select);
+                numerosApostaElement.appendChild(div);
+            }
+            adicionarEventos();
+        }
+
+        tipoApostaElement.addEventListener('change', () => {
+            const tipoAposta = tipoApostaElement.value;
+            if (tipoAposta === 'mega_sena') {
+                criarSelectNumeros(6, 60);
+            } else if (tipoAposta === 'loto_facil') {
+                criarSelectNumeros(15, 25);
+            } else if (tipoAposta === 'quina') {
+                criarSelectNumeros(5, 80);
+            }
+        });
+
+        // Inicializa os selects com base no valor inicial
+        tipoApostaElement.dispatchEvent(new Event('change'));
+    </script>
 </body>
 </html>

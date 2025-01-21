@@ -28,19 +28,11 @@ USUARIO = {
     "password": "1"
 }
 
-# Lista para armazenar apostas
+# Listas para armazenar diferentes dados
 apostas = []
-
-# Lista para armazenar participantes
 participantes = []
-
-# Lista para armazenar turmas
 turmas = []
-
-# Lista para armazenar alunos
 alunos = []
-
-
 
 @app.route('/')
 def home():
@@ -70,14 +62,16 @@ def logout():
     session.pop('tipo_aposta', None)
     return redirect(url_for('login'))
 
+
 @app.route('/place_bet', methods=['GET', 'POST'])
 def place_bet():
     if 'username' not in session:
         return redirect(url_for('login'))
-    
+
     tipo_aposta = session.get('tipo_aposta')
-    
+
     if request.method == 'POST':
+        numeros = []
         if tipo_aposta == "mega_sena":
             numeros = sorted([
                 request.form['numero1'],
@@ -88,16 +82,17 @@ def place_bet():
                 request.form['numero6']
             ])
         elif tipo_aposta == "loto_facil":
-            numeros = sorted([request.form['numero{}'.format(i)] for i in range(1, 16)])
+            numeros = sorted([request.form[f'numero{i}'] for i in range(1, 16)])
+        elif tipo_aposta == "quina":
+            numeros = sorted([request.form[f'numero{i}'] for i in range(1, 6)])
         
         valor = request.form['valor']
         participante = request.form['participante']
         aposta = {'numeros': numeros, 'valor': valor, 'participante': participante, 'tipo_aposta': tipo_aposta}
         apostas.append(aposta)
         return redirect(url_for('view_bets'))
-    
-    return render_template('place_bet.html', participantes=participantes, tipo_aposta=tipo_aposta)
 
+    return render_template('place_bet.html', participantes=participantes, tipo_aposta=tipo_aposta)
 @app.route('/view_bets')
 def view_bets():
     if 'username' not in session:
@@ -127,6 +122,7 @@ def edit_bet(bet_id):
     
     if request.method == 'POST':
         tipo_aposta = session.get('tipo_aposta')
+        numeros = []
         if tipo_aposta == "mega_sena":
             numeros = sorted([
                 request.form['numero1'],
@@ -137,7 +133,7 @@ def edit_bet(bet_id):
                 request.form['numero6']
             ])
         elif tipo_aposta == "loto_facil":
-            numeros = sorted([request.form['numero{}'.format(i)] for i in range(1, 16)])
+            numeros = sorted([request.form[f'numero{i}'] for i in range(1, 16)])
         
         valor = request.form['valor']
         participante = request.form['participante']
@@ -146,8 +142,6 @@ def edit_bet(bet_id):
     
     aposta = apostas[bet_id]
     return render_template('edit_bet.html', aposta=aposta, participantes=participantes, bet_id=bet_id)
-
-
 
 @app.route('/edit_participant/<int:participant_id>', methods=['GET', 'POST'])
 def edit_participant(participant_id):
@@ -162,8 +156,6 @@ def edit_participant(participant_id):
     
     participante = participantes[participant_id]
     return render_template('edit_participant.html', participante=participante, participant_id=participant_id)
-
-
 
 @app.route('/delete_bet/<int:bet_id>', methods=['POST'])
 def delete_bet(bet_id):
@@ -209,7 +201,6 @@ def cadastro_turmas():
         return redirect(url_for('cadastro_turmas'))
 
     return render_template('cadastro_turmas.html', turmas=turmas)
-
 
 @app.route('/cadastro_alunos', methods=['GET', 'POST'])
 def cadastro_alunos():
@@ -269,17 +260,9 @@ def generate_pdf():
 def escola_1():
     return render_template('escola_1.html')
 
-
-
 @app.route('/administrativo')
 def administrativo():
     return render_template('administrativo.html')
-
-
-
-
-#if __name__ == '__main__':
- #   app.run(debug=True)
 
 if __name__ == '__main__':
     app.run(host='192.168.1.21', port=5000, debug=True)

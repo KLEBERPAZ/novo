@@ -9,6 +9,11 @@ body {
     height: 100vh;
 }
 
+.highlight { 
+    color: red; 
+}
+
+
 .container {
     background: white;
     padding: 20px;
