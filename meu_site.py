@@ -265,4 +265,4 @@ def administrativo():
     return render_template('administrativo.html')
 
 if __name__ == '__main__':
-    app.run(host='192.168.1.21', port=5000, debug=True)
+    app.run(host='192.168.0.264', port=5000, debug=True)       
